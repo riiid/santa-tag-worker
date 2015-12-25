@@ -1,7 +1,7 @@
 import assert from 'assert';
 import {
   mapTags,
-  updateWrongAnswerFromResponse
+  updateWrongAnswerFrom
 } from '../lib/push2server';
 
 describe('push2server.js', () => {
@@ -34,7 +34,7 @@ describe('push2server.js', () => {
     });
   });
 
-  it('updateWrongAnswerFromResponse', () => {
+  it('updateWrongAnswerFrom', () => {
     const response = [
       {
         id: 40000,
@@ -91,7 +91,7 @@ describe('push2server.js', () => {
         }
       ]
     };
-    let result = updateWrongAnswerFromResponse(response, tagInfo);
+    let result = updateWrongAnswerFrom(response, tagInfo);
 
     assert(result);
     assert.equal(result.wrong_answers[0].id, 40000);
