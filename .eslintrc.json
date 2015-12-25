@@ -1,0 +1,8 @@
+{
+    "parser": "babel-eslint",
+    "extends": "google",
+    "env": {
+      "node": true,
+      "mocha": true
+    }
+}
