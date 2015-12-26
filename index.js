@@ -8,10 +8,8 @@ import push2server$ from './lib/push2server';
 import error$ from './lib/error';
 import report from './lib/report';
 import progress from './lib/progress';
-import credential from './credential';
-import {sheetKey} from './config';
 
-auth$(credential, sheetKey)
+auth$()
   .tap(() => process.stderr.write(EOL))
   .concatMap(rows2obj$)
   .bufferWithCount(5)
