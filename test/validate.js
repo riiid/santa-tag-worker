@@ -1,7 +1,7 @@
 import assert from 'assert';
 import {
   shouldContainCoreTags,
-  shouldContainEmpty,
+  shouldContainEmpty
 } from '../lib/validate';
 
 describe('validate.js', () => {
