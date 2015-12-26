@@ -6,7 +6,8 @@ import auth$ from './lib/auth';
 import rows2obj$ from './lib/rows2obj';
 import transform$ from './lib/transform';
 import validate$ from './lib/validate';
-import push2server$, {pushError$} from './lib/push2server';
+import push2server$ from './lib/push2server';
+import error$ from './lib/error'
 import {EOL} from 'os';
 
 import credential from './credential';
@@ -43,8 +44,8 @@ auth$(credential, sheetKey)
         .value()
       log.result(`Process Count : ${res.length}`)
       log.result(`PQNA id Count : ${ids.length}`)
-      pushError$.onCompleted();
-      pushError$.toArray()
+      error$.onCompleted();
+      error$.toArray()
         .subscribe((error) => log.result(`Errored : ${error.length}`))
       log.result(ids);
     },
