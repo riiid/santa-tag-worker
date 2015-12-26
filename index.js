@@ -1,54 +1,34 @@
-import Rx from 'rx';
-import P from 'progress';
-import _ from 'lodash';
+import {EOL} from 'os';
 import log from './lib/log';
 import auth$ from './lib/auth';
 import rows2obj$ from './lib/rows2obj';
 import transform$ from './lib/transform';
 import validate$ from './lib/validate';
 import push2server$ from './lib/push2server';
-import error$ from './lib/error'
-import {EOL} from 'os';
-
+import error$ from './lib/error';
+import report from './lib/report';
+import progress from './lib/progress';
 import credential from './credential';
 import {sheetKey} from './config';
 
-let progress;
-
 auth$(credential, sheetKey)
+  .tap(() => process.stderr.write(EOL))
   .concatMap(rows2obj$)
   .bufferWithCount(5)
   .concatMap(transform$)
   .concatMap(validate$)
   .toArray()
-  .tap(items => {
-    log.info(EOL);
-    log.info(`Public QNA count : ${items.length}`);
-    log.info(EOL);
-    progress = new P('  process [:bar] :percent :etas', {
-      total: items.length,
-      width: 50
-    })
-  })
-  .concatMap(items => Rx.Observable.from(items))
+  .tap(progress.create)
   .concatMap(push2server$)
-  .tap(() => progress.tick())
+  .tap(progress.tick)
   .toArray()
+  .tap(() => error$.onCompleted())
+  .combineLatest(error$.toArray(), (result, errored) => {
+    return {result, errored};
+  })
+  .concatMap(report)
   .subscribe(
-    res => {
-      log.info(EOL);
-      log.info(EOL);
-      let ids = _.chain(res)
-        .pluck(res, 'publicQnaId')
-        .filter(id => !!id)
-        .value()
-      log.result(`Process Count : ${res.length}`)
-      log.result(`PQNA id Count : ${ids.length}`)
-      error$.onCompleted();
-      error$.toArray()
-        .subscribe((error) => log.result(`Errored : ${error.length}`))
-      log.result(ids);
-    },
+    res => { },
     err => console.error(err, err.stack),
     () => log.result('DONE')
   );
