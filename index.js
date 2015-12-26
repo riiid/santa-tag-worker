@@ -28,7 +28,7 @@ auth$(credential, sheetKey)
   })
   .concatMap(report)
   .subscribe(
-    res => { },
+    () => { },
     err => console.error(err, err.stack),
     () => log.result('DONE')
   );
