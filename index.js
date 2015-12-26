@@ -21,9 +21,9 @@ auth$(credential, sheetKey)
   .concatMap(validate$)
   .toArray()
   .tap(items => {
-    process.stderr.write(EOL);
+    log.info(EOL);
     log.info(`Public QNA count : ${items.length}`);
-    process.stderr.write(EOL);
+    log.info(EOL);
     progress = new P('  process [:bar] :percent :etas', {
       total: items.length,
       width: 50
@@ -35,8 +35,8 @@ auth$(credential, sheetKey)
   .toArray()
   .subscribe(
     res => {
-      process.stderr.write(EOL);
-      process.stderr.write(EOL);
+      log.info(EOL);
+      log.info(EOL);
       let ids = _.chain(res)
         .pluck(res, 'publicQnaId')
         .filter(id => !!id)
