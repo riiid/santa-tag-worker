@@ -1,29 +1,102 @@
+/* eslint camelcase:0 */
 import assert from 'assert';
 import {
+  shouldHaveCoreTag,
+  shouldNotContainReason,
   shouldContainCoreTags,
   shouldContainEmpty
 } from '../lib/validate';
 
 describe('validate.js', () => {
-  it('shouldContainCoreTags', () => {
+  it('shouldHaveCoreTag', () => {
     const returnTrue = {
       publicQnaId: 1234567,
-      coreTag: 'coreTag',
-      tags: [
-        ['tag1', 'tag5'],
-        ['coreTag', 'tag6'],
-        ['tag3', undefined],
-        ['tag4', undefined]
+      coreTag: {id: 1, name: 'coreTag'}
+    };
+    const returnFalse = {
+      publicQnaId: 1234567,
+      coreTag: 'coreTag'
+    };
+    assert.equal(shouldHaveCoreTag(returnTrue), true);
+    assert.equal(shouldHaveCoreTag(returnFalse), false);
+  });
+
+  it('shouldNotContainReason', () => {
+    const returnTrue = {
+      publicQnaId: 1234567,
+      coreTag: {id: 1, name: 'coreTag'},
+      wrong_answers: [
+        {
+          number: 1,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 1, name: 'coreTag'}},
+            {id: null, tag: {id: 5, name: 'tag5'}}
+          ]
+        }
       ]
     };
     const returnFalse = {
       publicQnaId: 1234567,
-      coreTag: 'coreTag',
-      tags: [
-        ['tag1', undefined],
-        ['tag2', undefined],
-        ['tag3', undefined],
-        ['tag4', undefined]
+      coreTag: {id: 1, name: 'coreTag'},
+      wrong_answers: [
+        {
+          number: 1,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 1, name: 'tagX', reason: 'cannt find tag'}},
+            {id: null, tag: {id: 5, name: 'tag5'}}
+          ]
+        }
+      ]
+    };
+    assert.equal(shouldNotContainReason(returnTrue), true);
+    assert.equal(shouldNotContainReason(returnFalse), false);
+  });
+
+  it('shouldContainCoreTags', () => {
+    const returnTrue = {
+      publicQnaId: 1234567,
+      coreTag: {id: 1, name: 'coreTag'},
+      wrong_answers: [
+        {
+          number: 1,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 1, name: 'coreTag'}},
+            {id: null, tag: {id: 5, name: 'tag5'}}
+          ]
+        },
+        {
+          number: 2,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 2, name: 'tag2'}},
+            {id: null, tag: {id: 6, name: 'tag6'}}
+          ]
+        }
+      ]
+    };
+    const returnFalse = {
+      publicQnaId: 1234567,
+      coreTag: {id: 1, name: 'coreTag'},
+      wrong_answers: [
+        {
+          number: 1,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 1, name: 'tag1'}},
+            {id: null, tag: {id: 5, name: 'tag5'}}
+          ]
+        },
+        {
+          number: 2,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 2, name: 'tag2'}},
+            {id: null, tag: {id: 6, name: 'tag6'}}
+          ]
+        }
       ]
     };
     assert.equal(shouldContainCoreTags(returnTrue), true);
@@ -33,22 +106,46 @@ describe('validate.js', () => {
   it('shouldContainEmpty', () => {
     const returnTrue = {
       publicQnaId: 1234567,
-      coreTag: 'coreTag',
-      tags: [
-        ['tag1', 'tag5'],
-        ['tag2', 'tag6'],
-        [undefined, undefined],
-        ['tag4', undefined]
+      coreTag: {id: 1, name: 'coreTag'},
+      wrong_answers: [
+        {
+          number: 1,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 1, name: 'coreTag'}},
+            {id: null, tag: {id: 5, name: 'tag5'}}
+          ]
+        },
+        {
+          number: 2,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: null},
+            {id: null, tag: null}
+          ]
+        }
       ]
     };
     const returnFalse = {
       publicQnaId: 1234567,
-      coreTag: 'coreTag',
-      tags: [
-        ['tag1', 'tag5'],
-        ['tag2', 'tag6'],
-        ['tag4', undefined],
-        ['tag4', undefined]
+      coreTag: {id: 1, name: 'coreTag'},
+      wrong_answers: [
+        {
+          number: 1,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 1, name: 'coreTag'}},
+            {id: null, tag: {id: 5, name: 'tag5'}}
+          ]
+        },
+        {
+          number: 2,
+          answer: false,
+          wrong_answer_tags: [
+            {id: null, tag: {id: 2, name: 'tag2'}},
+            {id: null, tag: {id: 6, name: 'tag6'}}
+          ]
+        }
       ]
     };
     assert.equal(shouldContainEmpty(returnTrue), true);
