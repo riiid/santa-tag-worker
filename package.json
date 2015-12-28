@@ -28,6 +28,6 @@
     "test": "mocha -t 5000 -w --compilers js:babel-register --reporter nyan",
     "lint": "nodemon --watch index.js --watch lib --watch test --exec eslint index.js lib/**/*.js test/**/*.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "kyung yeol kim <kykim@riiid.co>",
+  "license": "MIT"
 }
