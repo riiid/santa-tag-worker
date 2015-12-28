@@ -41,6 +41,6 @@ import rows2obj$ from './lib/rows2obj';
 
 auth$()
   .concatMap(rows2obj$)
-  // your own works !!
+  // implement your own worker !!
   .subscribe();
 ```
