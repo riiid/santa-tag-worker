@@ -1,6 +1,7 @@
 /* eslint camelcase:0 */
 import assert from 'assert';
 import {
+  shouldHavePublicQnaId,
   shouldHaveCoreTag,
   shouldNotContainReason,
   shouldContainCoreTags,
@@ -19,6 +20,23 @@ describe('validate.js', () => {
     };
     assert.equal(shouldHaveCoreTag(returnTrue), true);
     assert.equal(shouldHaveCoreTag(returnFalse), false);
+  });
+
+  it('shouldHavePublicQnaId', () => {
+    const returnTrue = {
+      publicQnaId: 1234567,
+      coreTag: {id: 1, name: 'coreTag'}
+    };
+    const returnFalse_1 = {
+      coreTag: 'coreTag'
+    };
+    const returnFalse_2 = {
+      publicQnaId: null,
+      coreTag: 'coreTag'
+    };
+    assert.equal(shouldHavePublicQnaId(returnTrue), true);
+    assert.equal(shouldHavePublicQnaId(returnFalse_1), false);
+    assert.equal(shouldHavePublicQnaId(returnFalse_2), false);
   });
 
   it('shouldNotContainReason', () => {
