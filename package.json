@@ -1,6 +1,6 @@
 {
   "name": "santa-tag-worker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fetch data from google sheets and ...",
   "main": "index.js",
   "dependencies": {
