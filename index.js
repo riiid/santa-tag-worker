@@ -12,7 +12,6 @@ import progress from './lib/progress';
 auth$()
   .tap(() => process.stderr.write(EOL))
   .concatMap(rows2obj$)
-  .bufferWithCount(5)
   .concatMap(transform$)
   .concatMap(validate$)
   .toArray()
