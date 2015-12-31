@@ -198,7 +198,7 @@ describe('validate.js', () => {
           wrong_answer_tags: [
             {id: null, tag: {id: 1, name: 'coreTag'}}
           ]
-        },
+        }
       ]
     };
     const returnFalse = {
